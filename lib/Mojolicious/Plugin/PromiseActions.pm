@@ -10,9 +10,9 @@ sub register {
     around_action => sub {
       my ($next, $c) = @_;
       my $res = $next->();
-      if (blessed $res && $res->isa('Mojo::Promise')) {
+      if (blessed $res && $res->can('then')) {
         my $tx = $c->render_later;
-        $res->catch(sub { $c->reply->exception(pop) and undef $tx });
+        $res->then(undef, sub { $c->reply->exception(pop) and undef $tx });
       }
       return $res;
     }
