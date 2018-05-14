@@ -2,18 +2,19 @@ package Mojolicious::Plugin::PromiseActions;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION='0.01';
+our $VERSION = '0.01';
 
 sub register {
   my ($elf, $app, $config) = @_;
   $app->hook(
-    around_dispatch => sub {
+    around_action => sub {
       my ($next, $c) = @_;
       my $res = $next->();
       if (ref $res && ref $res eq 'Mojo::Promise') {
         my $tx = $c->render_later;
         $res->catch(sub { $c->reply->exception(pop) and undef $tx });
       }
+      return $res;
     }
   );
 }
