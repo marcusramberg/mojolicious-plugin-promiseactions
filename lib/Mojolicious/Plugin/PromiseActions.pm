@@ -10,7 +10,7 @@ sub register {
     around_action => sub {
       my ($next, $c) = @_;
       my $res = $next->();
-      if (ref $res && ref $res eq 'Mojo::Promise') {
+      if (blessed $res && $res->isa('Mojo::Promise')) {
         my $tx = $c->render_later;
         $res->catch(sub { $c->reply->exception(pop) and undef $tx });
       }
