@@ -15,8 +15,15 @@ get '/' => sub {
     $c->render(text=>'Hello');
   });
 };
+get '/normal' => sub {
+  my $c=shift;
+  $c->render(text=>'NO');
+  return 1;
+};
 
 my $t=Test::Mojo->new;
 $t->get_ok('/')->status_is('200')->content_is('Hello');
+$t->get_ok('/normal')->status_is('200')->content_is('NO');
+
 
 done_testing;
