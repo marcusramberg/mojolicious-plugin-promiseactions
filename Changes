@@ -1,8 +1,10 @@
 Revision history for perl distribution Mojolicious-Plugin-PromiseActions
 
-0.02 2018-05-16T15:55:20+0200
+0.03 Not Released
+- Add missing requires on Mojolicious
 
- - Fix indirect use of blessed;
+0.02 2018-05-16T15:55:20+0200
+- Fix indirect use of blessed;
 
 0.01 2018-05-14T11:40:11+0200
  - Started project
