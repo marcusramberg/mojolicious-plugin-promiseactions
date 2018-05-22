@@ -3,6 +3,7 @@ use Test::More;
 use Test::Mojo;
 
 use Mojolicious::Lite;
+use Mojo::Promise;
 
 plugin 'PromiseActions';
 
