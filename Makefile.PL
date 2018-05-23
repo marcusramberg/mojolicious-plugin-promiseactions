@@ -14,7 +14,7 @@ my %WriteMakefileArgs = (
 }
 ,
   PREREQ_PM      => {
-  'Mojolicious' => '5.75',
+  'Mojolicious' => '7.75',
   'perl' => 'v5.10.0'
 }
 ,

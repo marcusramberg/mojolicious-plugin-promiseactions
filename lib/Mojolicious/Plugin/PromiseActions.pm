@@ -4,7 +4,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Scalar::Util 'blessed';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub register {
   my ($elf, $app, $config) = @_;
