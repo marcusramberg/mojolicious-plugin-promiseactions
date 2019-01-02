@@ -2,6 +2,7 @@ package Mojolicious::Plugin::PromiseActions;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
+use Mojo::Promise;
 use Scalar::Util 'blessed';
 
 our $VERSION = '0.07';
@@ -14,8 +15,8 @@ sub register {
       my (@args) = $next->();
       if (blessed($args[0]) && $args[0]->can('then')) {
         my $tx = $c->render_later->tx;
-        $args[0]->then(undef, sub { $c->reply->exception(pop) and undef $tx });
-        $args[0]->can('wait') && $args[0]->wait;
+        my $p = Mojo::Promise->resolve($args[0]);
+        $p->catch(sub { $c->reply->exception($_[0]) and undef $tx })->wait;
       }
       return @args;
     }
