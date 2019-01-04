@@ -11,15 +11,20 @@ sub register {
   my ($elf, $app, $config) = @_;
   $app->hook(
     around_action => sub {
-      my ($next, $c) = @_;
+      my ($next, $c, $action, $last) = @_;
       my $want = wantarray;
       my @args;
       if ($want) { @args    = $next->() }
       else       { $args[0] = $next->() }
       if (blessed($args[0]) && $args[0]->can('then')) {
-        my $tx = $c->render_later->tx;
+        my $tx = $c->tx;
+        $c->render_later if $last;
         my $p = Mojo::Promise->resolve($args[0]);
-        $p->catch(sub { $c->reply->exception($_[0]) and undef $tx })->wait;
+        $p->then(
+          ($last ? undef : sub { $c->continue if $_[0] }),
+          sub { $c->reply->exception($_[0]) and undef $tx },
+        )->wait;
+        return unless $last;
       }
       return $want ? @args : $args[0];
     }

@@ -17,6 +17,16 @@ $r->under('/normal' => sub {
   return 0;
 })->get('/' => { text => 'ok' });
 
+$r->under('/promise' => sub {
+  my $c = shift;
+  my $p = Mojo::Promise->new;
+  Mojo::IOLoop->timer(0.1 => sub { $p->resolve });
+  return $p->then(sub{
+    $c->render(text => 'nok') unless $ok;
+    return $ok;
+  });
+})->get('/' => { text => 'ok' });
+
 my $t = Test::Mojo->new;
 
 # tests to be sure that regular unders work as expected
@@ -31,7 +41,17 @@ $t->get_ok('/normal')
   ->status_is(200)
   ->content_is('nok');
 
-#TODO add tests for returning promises
+# tests for unders that return promises
+
+$ok = 1;
+$t->get_ok('/promise')
+  ->status_is(200)
+  ->content_is('ok');
+
+$ok = 0;
+$t->get_ok('/promise')
+  ->status_is(200)
+  ->content_is('nok');
 
 done_testing;
 
