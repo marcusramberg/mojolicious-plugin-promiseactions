@@ -22,6 +22,7 @@ $r->under('/promise' => sub {
   my $p = Mojo::Promise->new;
   Mojo::IOLoop->timer(0.1 => sub { $p->resolve });
   return $p->then(sub{
+    die 'ARGH' unless defined $ok;
     $c->render(text => 'nok') unless $ok;
     return $ok;
   });
@@ -52,6 +53,11 @@ $ok = 0;
 $t->get_ok('/promise')
   ->status_is(200)
   ->content_is('nok');
+
+$ok = undef;
+$t->get_ok('/promise')
+  ->status_is(500)
+  ->content_like(qr/ARGH/);
 
 done_testing;
 
