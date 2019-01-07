@@ -5,7 +5,6 @@ use Test::Mojo;
 use Mojolicious::Lite;
 use Mojo::Promise;
 
-plugin 'PromiseActions';
 my @values;
 
 app->hook(around_action => sub {
@@ -13,8 +12,9 @@ app->hook(around_action => sub {
     my ($res, $text) = $next->();
     push @values, $res,$text;
     return ($res, $text);
-
 });
+
+plugin 'PromiseActions';
 
 get '/' => sub {
   my $c=shift;
