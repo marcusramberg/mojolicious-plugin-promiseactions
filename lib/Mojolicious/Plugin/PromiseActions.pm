@@ -58,10 +58,16 @@ actions return a L<Mojo::Promise>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2018, Marcus Ramberg.
+Copyright (C) 2019, Marcus Ramberg.
 
 This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.
+
+=head1 AUTHORS
+
+Joel Berger, C<jberger@mojolicious.org>
+
+Marcus Ramberg, C<marcus@mojolicious.org>
 
 =head1 SEE ALSO
 
