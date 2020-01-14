@@ -1,6 +1,10 @@
 BEGIN { $ENV{MOJO_REACTOR} = 'Mojo::Reactor::Poll' }
 use Test::More;
 use Test::Mojo;
+if ($Mojolicious::VERSION >= 8.28) {
+  use Test::More skip_all => 'Plugin deprecated';
+  exit;
+}
 
 use Mojolicious::Lite;
 use Mojo::Promise;
