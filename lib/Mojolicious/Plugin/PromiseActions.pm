@@ -9,13 +9,18 @@ our $VERSION = '0.08';
 
 sub register {
   my ($elf, $app, $config) = @_;
+  if ($Mojolicious::VERSION >= 8.28) {
+    warn "DEPRECATED: PromiseActions plugin is no longer needed";
+    return;
+  }
+
   $app->hook(
     around_action => sub {
       my ($next, $c, $action, $last) = @_;
       my $want = wantarray;
       my @args;
-      if ($want) { @args    = $next->() }
-      else       { $args[0] = $next->() }
+      if   ($want) { @args    = $next->() }
+      else         { $args[0] = $next->() }
       if (blessed($args[0]) && $args[0]->can('then')) {
         my $tx = $c->tx;
         $c->render_later if $last;
@@ -36,6 +41,11 @@ sub register {
 =head1 NAME
 
 Mojolicious::Plugin::PromiseActions - Automatic async and error handling for Promises
+
+
+=head1 DEPRECATED
+
+As of Mojolicious 8.28 the functionality this plugin provides is built in, and it can thus be removed. Otherwise functionality will be disabled automatically.
 
 =head1 SYNOPSIS
 
